@@ -11,7 +11,7 @@ class CustomViewModelFactory(private val repository: Repository) : ViewModelProv
 
         when (modelClass) {
             MainViewModel::class.java -> return MainViewModel(repository) as T
-            else -> throw java.lang.RuntimeException("Unknown ")
+            else -> throw java.lang.RuntimeException("Not supported class ${modelClass.simpleName}")
         }
 
     }

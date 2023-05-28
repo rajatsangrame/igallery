@@ -11,7 +11,10 @@ data class Folder(
     val id: String,
 
     @ColumnInfo(name = "name")
-    val name: String
+    val name: String,
+
+    @ColumnInfo(name = "path")
+    val path: String
 )
 
 

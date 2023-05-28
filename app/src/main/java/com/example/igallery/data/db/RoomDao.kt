@@ -7,10 +7,10 @@ import androidx.room.*
 interface FolderDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun bulkInsert(folders: List<Folder>)
+    suspend fun bulkInsert(folders: MutableList<Folder>)
 
-    @Query("SELECT * FROM folder")
-    fun getAll(): LiveData<List<Folder>>
+    @Query("SELECT * FROM folder LIMIT :batchSize OFFSET :offset")
+    suspend fun get(offset: Int, batchSize: Int): MutableList<Folder>
 
 }
 
@@ -18,12 +18,9 @@ interface FolderDao {
 interface ImageDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun bulkInsert(images: List<Image>)
+    suspend fun bulkInsert(images: MutableList<Image>)
 
-    @Query("SELECT * FROM image")
-    fun getAll(): LiveData<List<Image>>
-
-    @Update()
-    suspend fun update(folder: Image)
+    @Query("SELECT * FROM image LIMIT :batchSize OFFSET :offset")
+    suspend fun get(offset: Int, batchSize: Int): MutableList<Image>
 
 }

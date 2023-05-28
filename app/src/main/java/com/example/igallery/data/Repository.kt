@@ -9,8 +9,13 @@ import com.example.igallery.data.db.Image
 
 class Repository(private val db: GalleryDatabase, private val contentResolver: ContentResolver) {
 
-    fun getFolders() = db.folderDao().getAll()
-    fun getImages() = db.imageDao().getAll()
+    suspend fun getFolders(offset: Int, size: Int): MutableList<Folder> {
+        return db.folderDao().get(offset = offset, batchSize = size)
+    }
+
+    suspend fun getImages(offset: Int, size: Int): MutableList<Image> {
+        return db.imageDao().get(offset = offset, batchSize = size)
+    }
 
     suspend fun loadImages() {
         val projection = arrayOf(
@@ -18,7 +23,7 @@ class Repository(private val db: GalleryDatabase, private val contentResolver: C
             MediaStore.Images.ImageColumns.DATE_ADDED, MediaStore.Images.Media.DISPLAY_NAME, MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
             MediaStore.Images.Media.BUCKET_ID
         )
-        val sortOrder = MediaStore.Images.Media.DATE_MODIFIED + " DESC"
+        val sortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC"
         val cursor = contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             projection,
@@ -30,21 +35,28 @@ class Repository(private val db: GalleryDatabase, private val contentResolver: C
         val imageList = mutableListOf<Image>()
         val folders = mutableSetOf<Folder>()
         do {
-            val imageId = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
-            val name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
-            val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
-            val date = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED))
-            val folderName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME))
-            val folderId = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID))
+            try {
+                val imageId = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
+                val path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA))
+                val date = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED))
+                val folderName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME))
+                val folderId = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID))
 
-            val image = Image(imageId, folderId, name, date, path)
-            imageList.add(image)
-            val folder = Folder(folderId, folderName)
-            folders.add(folder)
+                val image = Image(imageId, folderId, name, date, path)
+                imageList.add(image)
+                val folder = Folder(folderId, folderName, path)
+                folders.add(folder)
+            } catch (e: Exception) {
+                Log.d(TAG, "loadImages: ${e.localizedMessage}")
+            }
         } while (cursor.moveToNext())
         cursor.close()
         db.imageDao().bulkInsert(imageList)
-        db.folderDao().bulkInsert(folders.toList())
+        db.folderDao().bulkInsert(folders.toMutableList())
     }
 
+    companion object {
+        private const val TAG = "Repository"
+    }
 }
