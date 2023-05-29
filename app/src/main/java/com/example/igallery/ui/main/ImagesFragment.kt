@@ -12,8 +12,10 @@ import com.example.igallery.data.db.GalleryDatabase
 import com.example.igallery.databinding.FragmentMediaBinding
 import com.example.igallery.ui.Baseragment
 import com.example.igallery.ui.adapter.ImageAdapter
+import com.example.igallery.ui.fullscreen.FullScreenActivity
 import com.example.igallery.util.CustomViewModelFactory
 import com.example.igallery.util.GridSpacingItemDecoration
+import com.example.igallery.util.PaginationScrollListener
 
 class ImagesFragment : Baseragment<FragmentMediaBinding>() {
 
@@ -46,12 +48,20 @@ class ImagesFragment : Baseragment<FragmentMediaBinding>() {
 
     override fun setup() {
         imageAdapter = ImageAdapter {
-            findNavController().navigate(R.id.action_ImagesFragment_to_FullScreenFragment)
+            FullScreenActivity.start(requireContext(), it.path)
         }
         binding.rvMedia.apply {
-            layoutManager = GridLayoutManager(context, 3)
-            addItemDecoration(GridSpacingItemDecoration(3, 32, true))
+            val gridLayoutManager = GridLayoutManager(context, 4)
+            layoutManager = gridLayoutManager
+            addItemDecoration(GridSpacingItemDecoration(4, 8, true))
             adapter = imageAdapter
+            addOnScrollListener(object : PaginationScrollListener(gridLayoutManager) {
+                override fun loadMoreItems() {
+                    mainViewModel.loadMoreImages()
+                }
+
+                override fun isLoading() = false
+            })
         }
         setupObservers()
         mainViewModel.loadInitialImages()

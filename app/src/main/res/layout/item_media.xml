@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="150dp"
-    tools:context=".ui.FoldersActivity">
+    tools:context=".ui.main.MainActivity">
 
 
     <ImageView
@@ -13,10 +13,13 @@
         android:layout_height="match_parent" />
 
     <TextView
+        android:background="#80111111"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#60111111"
+        android:padding="2dp"
         android:gravity="start"
         app:layout_constraintBottom_toBottomOf="@+id/image"
         app:layout_constraintEnd_toEndOf="parent"

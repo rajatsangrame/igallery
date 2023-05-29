@@ -1,6 +1,5 @@
 package com.example.igallery.ui.main
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,10 +12,13 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: Repository) : ViewModel() {
 
-    val images = MutableLiveData<MutableList<Image>>()
+    val images = MutableLiveData<MutableList<Image>?>()
     val folders = MutableLiveData<MutableList<Folder>>()
     val progress = MutableLiveData(false)
-    var folderId: String? = null
+
+    // User selected folder id to be used to fetch images for selected folder
+    var selectedFolderId: String? = null
+
     private var folderOffset = 0
     private var imageOffset = 0
     private var dataLoaded = false
@@ -28,29 +30,34 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun loadInitialImages() {
-        if (folderId == null) return
+        if (selectedFolderId == null) return
         viewModelScope.launch(Dispatchers.IO) {
             progress.postValue(true)
             if (!dataLoaded) loadData().join()
 
             imageOffset = 0
-            val data = getImages(folderId = folderId!!, offset = imageOffset)
+            val data = getImages(folderId = selectedFolderId!!, offset = imageOffset)
             images.postValue(data)
             progress.postValue(false)
         }
     }
 
     fun loadMoreImages() {
-        if (folderId == null) return
+        if (selectedFolderId == null) return
         viewModelScope.launch(Dispatchers.IO) {
             progress.postValue(true)
             imageOffset += 10
-            val data = getImages(folderId = folderId!!, offset = imageOffset)
+            val data = getImages(folderId = selectedFolderId!!, offset = imageOffset)
             val old = images.value ?: mutableListOf()
             old.addAll(data)
             images.postValue(old)
             progress.postValue(false)
         }
+    }
+
+    fun resetImageData() {
+        selectedFolderId = null
+        images.value = null
     }
 
     // endregion

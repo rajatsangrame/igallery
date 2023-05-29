@@ -33,7 +33,7 @@ class Repository(private val db: GalleryDatabase, private val contentResolver: C
         )
         if (cursor == null || !cursor.moveToFirst()) return
         val imageList = mutableListOf<Image>()
-        val folders = mutableSetOf<Folder>()
+        val folders = mutableMapOf<String, Folder>()
         do {
             try {
                 val imageId = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
@@ -46,14 +46,19 @@ class Repository(private val db: GalleryDatabase, private val contentResolver: C
                 val image = Image(imageId, folderId, name, date, path)
                 imageList.add(image)
                 val folder = Folder(folderId, folderName, path)
-                folders.add(folder)
+
+                // Update the latest image path in the folder
+                if (!folders.contains(folder.id)) {
+                    folders[folder.id] = folder
+                }
+
             } catch (e: Exception) {
                 Log.d(TAG, "loadImages: ${e.localizedMessage}")
             }
         } while (cursor.moveToNext())
         cursor.close()
         db.imageDao().bulkInsert(imageList)
-        db.folderDao().bulkInsert(folders.toMutableList())
+        db.folderDao().bulkInsert(folders.values.toMutableList())
     }
 
     companion object {

@@ -18,5 +18,5 @@ fun ImageView.loadThumbnail(uri: Uri) {
 
 fun ImageView.loadThumbnail(path: String) {
     val file = File(path)
-    Glide.with(this.context).load(file).into(this)
+    Glide.with(this.context).load(file).sizeMultiplier(0.6f).centerCrop().into(this)
 }

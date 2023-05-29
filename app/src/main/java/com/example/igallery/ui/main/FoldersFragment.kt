@@ -14,6 +14,7 @@ import com.example.igallery.ui.*
 import com.example.igallery.ui.adapter.FolderAdapter
 import com.example.igallery.util.CustomViewModelFactory
 import com.example.igallery.util.GridSpacingItemDecoration
+import com.example.igallery.util.PaginationScrollListener
 
 class FoldersFragment : Baseragment<FragmentMediaBinding>() {
 
@@ -29,14 +30,23 @@ class FoldersFragment : Baseragment<FragmentMediaBinding>() {
         get() = FragmentMediaBinding::inflate
 
     override fun setup() {
+        mainViewModel.resetImageData()
         folderAdapter = FolderAdapter {
-            mainViewModel.folderId = it.id
+            mainViewModel.selectedFolderId = it.id
             findNavController().navigate(R.id.action_FoldersFragment_to_ImagesFragment)
         }
         binding.rvMedia.apply {
-            layoutManager = GridLayoutManager(context, 3)
+            val gridLayoutManager = GridLayoutManager(context, 3)
+            layoutManager = gridLayoutManager
             addItemDecoration(GridSpacingItemDecoration(3, 32, true))
             adapter = folderAdapter
+            addOnScrollListener(object : PaginationScrollListener(gridLayoutManager) {
+                override fun loadMoreItems() {
+                    mainViewModel.loadMoreFolder()
+                }
+
+                override fun isLoading() = false
+            })
         }
         setupObservers()
         mainViewModel.loadInitialFolders()

@@ -20,14 +20,6 @@
         android:name="com.example.igallery.ui.main.ImagesFragment"
         android:label="@string/label_images"
         tools:layout="@layout/fragment_media">
-        <action
-            android:id="@+id/action_ImagesFragment_to_FullScreenFragment"
-            app:destination="@id/FullScreenFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/FullScreenFragment"
-        android:label="@string/label_full_screen"
-        android:name="com.example.igallery.ui.main.FullScreenFragment" />
 
 </navigation>
