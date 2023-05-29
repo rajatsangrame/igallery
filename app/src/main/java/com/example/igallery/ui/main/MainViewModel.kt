@@ -1,4 +1,4 @@
-package com.example.igallery.ui
+package com.example.igallery.ui.main
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -16,34 +16,36 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val images = MutableLiveData<MutableList<Image>>()
     val folders = MutableLiveData<MutableList<Folder>>()
     val progress = MutableLiveData(false)
-
+    var folderId: String? = null
     private var folderOffset = 0
     private var imageOffset = 0
     private var dataLoaded = false
 
     // region Images
 
-    private suspend fun getImages(offset: Int, size: Int = 10): MutableList<Image> {
-        return repository.getImages(offset = offset, size = size)
+    private suspend fun getImages(folderId: String, offset: Int, size: Int = 10): MutableList<Image> {
+        return repository.getImages(folderId = folderId, offset = offset, size = size)
     }
 
     fun loadInitialImages() {
+        if (folderId == null) return
         viewModelScope.launch(Dispatchers.IO) {
             progress.postValue(true)
             if (!dataLoaded) loadData().join()
 
             imageOffset = 0
-            val data = getImages(offset = imageOffset)
+            val data = getImages(folderId = folderId!!, offset = imageOffset)
             images.postValue(data)
             progress.postValue(false)
         }
     }
 
     fun loadMoreImages() {
+        if (folderId == null) return
         viewModelScope.launch(Dispatchers.IO) {
             progress.postValue(true)
             imageOffset += 10
-            val data = getImages(offset = imageOffset)
+            val data = getImages(folderId = folderId!!, offset = imageOffset)
             val old = images.value ?: mutableListOf()
             old.addAll(data)
             images.postValue(old)

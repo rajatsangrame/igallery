@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">iGallary</string>
+
+    <string name="label_folder">Folders Fragment</string>
+    <string name="label_images">Images Fragment</string>
+    <string name="label_full_screen">Full Screen Fragment</string>
 </resources>

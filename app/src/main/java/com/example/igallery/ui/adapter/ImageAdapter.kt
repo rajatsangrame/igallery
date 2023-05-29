@@ -1,33 +1,33 @@
-package com.example.igallery.ui
+package com.example.igallery.ui.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.igallery.data.db.Image
-import com.example.igallery.databinding.ItemFolderBinding
+import com.example.igallery.databinding.ItemMediaBinding
 import com.example.igallery.util.loadThumbnail
 
 class ImageAdapter(
-    private var images: MutableList<Image> = ArrayList()
+    private var images: List<Image> = ArrayList(),
+    private val callback: (Image) -> Unit
 ) :
     RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
     fun setImages(images: List<Image>) {
-        this.images.addAll(images)
+        this.images = images
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemFolderBinding.inflate(
+        val binding = ItemMediaBinding.inflate(
             layoutInflater,
             parent, false
         )
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ImageAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(images[position])
     }
 
@@ -35,10 +35,16 @@ class ImageAdapter(
         return images.size
     }
 
-    inner class ViewHolder(private val binding: ItemFolderBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemMediaBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.root.setOnClickListener {
+                callback(images[adapterPosition])
+            }
+        }
+
         fun bind(image: Image) {
             binding.text.text = image.name
-            binding.image.loadThumbnail(Uri.parse(image.path))
+            binding.image.loadThumbnail(image.path)
         }
     }
 

@@ -20,7 +20,7 @@ interface ImageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun bulkInsert(images: MutableList<Image>)
 
-    @Query("SELECT * FROM image LIMIT :batchSize OFFSET :offset")
-    suspend fun get(offset: Int, batchSize: Int): MutableList<Image>
+    @Query("SELECT * FROM image WHERE folderId = :folderId LIMIT :batchSize OFFSET :offset")
+    suspend fun get(folderId: String, offset: Int, batchSize: Int): MutableList<Image>
 
 }

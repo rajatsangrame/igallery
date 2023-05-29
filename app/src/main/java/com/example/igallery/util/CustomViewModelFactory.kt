@@ -3,7 +3,7 @@ package com.example.igallery.util
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.igallery.data.Repository
-import com.example.igallery.ui.MainViewModel
+import com.example.igallery.ui.main.MainViewModel
 
 class CustomViewModelFactory(private val repository: Repository) : ViewModelProvider.Factory {
 

@@ -13,8 +13,8 @@ class Repository(private val db: GalleryDatabase, private val contentResolver: C
         return db.folderDao().get(offset = offset, batchSize = size)
     }
 
-    suspend fun getImages(offset: Int, size: Int): MutableList<Image> {
-        return db.imageDao().get(offset = offset, batchSize = size)
+    suspend fun getImages(folderId: String, offset: Int, size: Int): MutableList<Image> {
+        return db.imageDao().get(folderId = folderId, offset = offset, batchSize = size)
     }
 
     suspend fun loadImages() {
