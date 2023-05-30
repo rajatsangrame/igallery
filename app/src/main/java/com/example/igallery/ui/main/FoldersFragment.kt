@@ -11,6 +11,7 @@ import com.example.igallery.R
 import com.example.igallery.databinding.FragmentMediaBinding
 import com.example.igallery.ui.*
 import com.example.igallery.ui.adapter.FolderAdapter
+import com.example.igallery.ui.search.SearchActivity
 import com.example.igallery.util.GridSpacingItemDecoration
 import com.example.igallery.util.PaginationScrollListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,6 +31,7 @@ class FoldersFragment : Baseragment<FragmentMediaBinding>() {
         setupToolbar()
         setupRecyclerView()
         setupObservers()
+        setupListeners()
         mainViewModel.loadInitialFolders()
     }
 
@@ -58,11 +60,17 @@ class FoldersFragment : Baseragment<FragmentMediaBinding>() {
         binding.toolbar.search.visibility = View.VISIBLE
     }
 
+    private fun setupListeners() {
+        binding.toolbar.search.setOnClickListener {
+            SearchActivity.start(requireContext())
+        }
+    }
+
     private fun setupObservers() {
-        mainViewModel.progress.observe(this) {
+        mainViewModel.getProgress().observe(this) {
             Log.d(TAG, "progress: ${it}")
         }
-        mainViewModel.folders.observe(this) {
+        mainViewModel.getFolders().observe(this) {
             it?.let {
                 folderAdapter.setFolders(it)
                 Log.d(TAG, "storagePermissionGranted: ${it.size}")

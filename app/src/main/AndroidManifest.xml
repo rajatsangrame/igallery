@@ -25,7 +25,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +36,11 @@
         <activity
             android:name=".ui.fullscreen.FullScreenActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
     </application>
 
 </manifest>

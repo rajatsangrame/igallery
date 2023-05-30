@@ -18,6 +18,10 @@ class Repository @Inject constructor(private val db: GalleryDatabase, private va
         return db.imageDao().get(folderId = folderId, offset = offset, batchSize = size)
     }
 
+    suspend fun searchImages(query: String, offset: Int, size: Int): MutableList<Image> {
+        return db.imageDao().search(query = query, offset = offset, batchSize = size)
+    }
+
     suspend fun loadImages() {
         val projection = arrayOf(
             MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA, MediaStore.Images.ImageColumns.DATA,

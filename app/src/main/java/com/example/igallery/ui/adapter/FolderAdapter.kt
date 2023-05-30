@@ -11,14 +11,14 @@ class FolderAdapter(
     private var folders: List<Folder> = ArrayList(),
     private val callback: (Folder) -> Unit
 ) :
-    RecyclerView.Adapter<FolderAdapter.ViewHolder>() {
+    RecyclerView.Adapter<BaseViewHolder<Folder>>() {
 
     fun setFolders(folders: List<Folder>) {
         this.folders = folders
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Folder> {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemFolderBinding.inflate(
             layoutInflater,
@@ -27,7 +27,7 @@ class FolderAdapter(
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<Folder>, position: Int) {
         holder.bind(folders[position])
     }
 
@@ -35,18 +35,19 @@ class FolderAdapter(
         return folders.size
     }
 
-    inner class ViewHolder(private val binding: ItemFolderBinding) : RecyclerView.ViewHolder(binding.root) {
-
+    inner class ViewHolder(private val binding: ItemFolderBinding) : BaseViewHolder<Folder>(binding.root) {
         init {
             binding.root.setOnClickListener {
                 callback(folders[adapterPosition])
             }
         }
 
-        fun bind(folder: Folder) {
+        override fun bind(folder: Folder) {
             binding.text.text = folder.name
             binding.image.loadThumbnail(folder.path, true)
         }
+
+        override fun bind(position: Int) {}
     }
 
 }

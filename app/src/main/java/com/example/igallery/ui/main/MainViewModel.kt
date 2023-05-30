@@ -1,11 +1,12 @@
 package com.example.igallery.ui.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.igallery.data.Repository
 import com.example.igallery.data.db.Folder
 import com.example.igallery.data.db.Image
+import com.example.igallery.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -13,11 +14,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class MainViewModel @Inject constructor(private val repository: Repository) : BaseViewModel() {
 
-    val images = MutableLiveData<MutableList<Image>?>()
-    val folders = MutableLiveData<MutableList<Folder>>()
-    val progress = MutableLiveData(false)
+    private val images = MutableLiveData<MutableList<Image>?>()
+    fun getImages(): LiveData<MutableList<Image>?> = images
+
+    private val folders = MutableLiveData<MutableList<Folder>>()
+    fun getFolders(): LiveData<MutableList<Folder>> = folders
 
     // User selected folder id to be used to fetch images for selected folder
     var selectedFolder: Folder? = null

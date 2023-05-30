@@ -22,4 +22,7 @@ interface ImageDao {
     @Query("SELECT * FROM image WHERE folderId = :folderId LIMIT :batchSize OFFSET :offset")
     suspend fun get(folderId: String, offset: Int, batchSize: Int): MutableList<Image>
 
+    @Query("SELECT * FROM image WHERE name LIKE :query || '%' LIMIT :batchSize OFFSET :offset")
+    suspend fun search(query: String, offset: Int, batchSize: Int): MutableList<Image>
+
 }

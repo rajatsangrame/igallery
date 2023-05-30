@@ -5,12 +5,12 @@ import android.content.Intent
 import android.view.LayoutInflater
 import androidx.navigation.fragment.NavHostFragment
 import com.example.igallery.R
-import com.example.igallery.databinding.AcitivityMainBinding
+import com.example.igallery.databinding.ActivityMainBinding
 import com.example.igallery.ui.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<AcitivityMainBinding>() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setup() {
         requestStoragePermission()
@@ -24,8 +24,8 @@ class MainActivity : BaseActivity<AcitivityMainBinding>() {
         navHostFragment.navController.graph = graph
     }
 
-    override val bindingInflater: (LayoutInflater) -> AcitivityMainBinding
-        get() = AcitivityMainBinding::inflate
+    override val bindingInflater: (LayoutInflater) -> ActivityMainBinding
+        get() = ActivityMainBinding::inflate
 
 
     companion object {
