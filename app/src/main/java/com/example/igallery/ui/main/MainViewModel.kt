@@ -17,11 +17,10 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     val progress = MutableLiveData(false)
 
     // User selected folder id to be used to fetch images for selected folder
-    var selectedFolderId: String? = null
+    var selectedFolder: Folder? = null
 
     private var folderOffset = 0
     private var imageOffset = 0
-    private var dataLoaded = false
 
     // region Images
 
@@ -30,24 +29,24 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun loadInitialImages() {
-        if (selectedFolderId == null) return
+        if (selectedFolder?.id == null) return
         viewModelScope.launch(Dispatchers.IO) {
             progress.postValue(true)
-            if (!dataLoaded) loadData().join()
+            loadData().join()
 
             imageOffset = 0
-            val data = getImages(folderId = selectedFolderId!!, offset = imageOffset)
+            val data = getImages(folderId = selectedFolder!!.id, offset = imageOffset)
             images.postValue(data)
             progress.postValue(false)
         }
     }
 
     fun loadMoreImages() {
-        if (selectedFolderId == null) return
+        if (selectedFolder?.id == null) return
         viewModelScope.launch(Dispatchers.IO) {
             progress.postValue(true)
             imageOffset += 10
-            val data = getImages(folderId = selectedFolderId!!, offset = imageOffset)
+            val data = getImages(folderId = selectedFolder!!.id, offset = imageOffset)
             val old = images.value ?: mutableListOf()
             old.addAll(data)
             images.postValue(old)
@@ -56,7 +55,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun resetImageData() {
-        selectedFolderId = null
+        selectedFolder = null
         images.value = null
     }
 
@@ -71,7 +70,7 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     fun loadInitialFolders() {
         viewModelScope.launch(Dispatchers.IO) {
             progress.postValue(true)
-            if (!dataLoaded) loadData().join()
+            loadData().join()
 
             folderOffset = 0
             val data = getFolders(offset = folderOffset)
@@ -95,7 +94,6 @@ class MainViewModel(private val repository: Repository) : ViewModel() {
     private fun loadData(): Job {
         return viewModelScope.launch(Dispatchers.IO) {
             repository.loadImages()
-            dataLoaded = true
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.igallery.ui.main
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -31,8 +32,15 @@ class FoldersFragment : Baseragment<FragmentMediaBinding>() {
 
     override fun setup() {
         mainViewModel.resetImageData()
+        setupToolbar()
+        setupRecyclerView()
+        setupObservers()
+        mainViewModel.loadInitialFolders()
+    }
+
+    private fun setupRecyclerView() {
         folderAdapter = FolderAdapter {
-            mainViewModel.selectedFolderId = it.id
+            mainViewModel.selectedFolder = it
             findNavController().navigate(R.id.action_FoldersFragment_to_ImagesFragment)
         }
         binding.rvMedia.apply {
@@ -48,8 +56,11 @@ class FoldersFragment : Baseragment<FragmentMediaBinding>() {
                 override fun isLoading() = false
             })
         }
-        setupObservers()
-        mainViewModel.loadInitialFolders()
+    }
+
+    private fun setupToolbar() {
+        binding.toolbar.title.text = getString(R.string.folder)
+        binding.toolbar.search.visibility = View.VISIBLE
     }
 
     private fun setupObservers() {

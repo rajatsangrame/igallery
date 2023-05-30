@@ -2,6 +2,7 @@ package com.example.igallery.ui.main
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -19,8 +20,11 @@ import com.example.igallery.util.PaginationScrollListener
 
 class ImagesFragment : Baseragment<FragmentMediaBinding>() {
 
-    private lateinit var imageAdapter: ImageAdapter
+    companion object {
+        private const val TAG = "PhotosFragment"
+    }
 
+    private lateinit var imageAdapter: ImageAdapter
     private val mainViewModel: MainViewModel by activityViewModels {
         val db = GalleryDatabase.getDataBase(requireContext())
         val repository = Repository(db, requireActivity().contentResolver)
@@ -42,14 +46,24 @@ class ImagesFragment : Baseragment<FragmentMediaBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMediaBinding
         get() = FragmentMediaBinding::inflate
 
-    companion object {
-        private const val TAG = "PhotosFragment"
+    private fun setupToolbar() {
+        binding.toolbar.title.text = mainViewModel.selectedFolder?.name ?: getString(R.string.images)
+        binding.toolbar.search.visibility = View.GONE
+        binding.toolbar.back.visibility = View.VISIBLE
     }
 
     override fun setup() {
+        setupToolbar()
         imageAdapter = ImageAdapter {
             FullScreenActivity.start(requireContext(), it.path)
         }
+        setupRecyclerView()
+        setupObservers()
+        setupListeners()
+        mainViewModel.loadInitialImages()
+    }
+
+    private fun setupRecyclerView() {
         binding.rvMedia.apply {
             val gridLayoutManager = GridLayoutManager(context, 4)
             layoutManager = gridLayoutManager
@@ -63,7 +77,11 @@ class ImagesFragment : Baseragment<FragmentMediaBinding>() {
                 override fun isLoading() = false
             })
         }
-        setupObservers()
-        mainViewModel.loadInitialImages()
+    }
+
+    private fun setupListeners() {
+        binding.toolbar.back.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

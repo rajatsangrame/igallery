@@ -45,7 +45,7 @@ class FolderAdapter(
 
         fun bind(folder: Folder) {
             binding.text.text = folder.name
-            binding.image.loadThumbnail(folder.path)
+            binding.image.loadThumbnail(folder.path, true)
         }
     }
 

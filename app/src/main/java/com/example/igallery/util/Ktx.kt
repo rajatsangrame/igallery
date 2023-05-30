@@ -3,6 +3,9 @@ package com.example.igallery.util
 import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import java.io.File
 
 
@@ -16,7 +19,13 @@ fun ImageView.loadThumbnail(uri: Uri) {
 }
 
 
-fun ImageView.loadThumbnail(path: String) {
+fun ImageView.loadThumbnail(path: String, roundCorner: Boolean = false) {
     val file = File(path)
-    Glide.with(this.context).load(file).sizeMultiplier(0.6f).centerCrop().into(this)
+    var builder = Glide.with(this.context).load(file)
+    builder = if (roundCorner) {
+        builder.transform(CenterCrop(), RoundedCorners(16))
+    } else {
+        builder.transform(CenterCrop())
+    }
+    builder.sizeMultiplier(0.6f).into(this)
 }

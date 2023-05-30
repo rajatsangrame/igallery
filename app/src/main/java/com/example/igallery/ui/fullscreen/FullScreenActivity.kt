@@ -3,6 +3,7 @@ package com.example.igallery.ui.fullscreen
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
+import android.view.WindowManager
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat.Type.systemBars
@@ -18,10 +19,7 @@ class FullScreenActivity : BaseActivity<ActivityFullScreenBinding>() {
     }
 
     override fun storagePermissionGranted() {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
-        windowInsetsController.hide(systemBars())
-
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         intent.getStringExtra(KEY_IMAGE_PATH)?.let {
             val file = File(it)
             binding.photoView.setImageURI(file.toUri())
