@@ -6,19 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.igallery.databinding.ActivitySearchBinding
 import com.example.igallery.ui.adapter.ImageAdapter
 import com.example.igallery.ui.base.BaseActivity
 import com.example.igallery.ui.fullscreen.FullScreenActivity
-import com.example.igallery.ui.main.ImagesFragment
-import com.example.igallery.util.GridSpacingItemDecoration
 import com.example.igallery.util.PaginationScrollListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchActivity : BaseActivity<ActivitySearchBinding>() {
