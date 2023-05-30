@@ -7,7 +7,9 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.igallery.R
 import com.example.igallery.databinding.AcitivityMainBinding
 import com.example.igallery.ui.base.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<AcitivityMainBinding>() {
 
     override fun setup() {

@@ -6,8 +6,9 @@ import android.util.Log
 import com.example.igallery.data.db.Folder
 import com.example.igallery.data.db.GalleryDatabase
 import com.example.igallery.data.db.Image
+import javax.inject.Inject
 
-class Repository(private val db: GalleryDatabase, private val contentResolver: ContentResolver) {
+class Repository @Inject constructor(private val db: GalleryDatabase, private val contentResolver: ContentResolver) {
 
     suspend fun getFolders(offset: Int, size: Int): MutableList<Folder> {
         return db.folderDao().get(offset = offset, batchSize = size)

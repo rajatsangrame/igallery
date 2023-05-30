@@ -6,11 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.igallery.data.Repository
 import com.example.igallery.data.db.Folder
 import com.example.igallery.data.db.Image
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(private val repository: Repository) : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     val images = MutableLiveData<MutableList<Image>?>()
     val folders = MutableLiveData<MutableList<Folder>>()

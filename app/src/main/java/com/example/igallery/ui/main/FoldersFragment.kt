@@ -16,16 +16,14 @@ import com.example.igallery.ui.adapter.FolderAdapter
 import com.example.igallery.util.CustomViewModelFactory
 import com.example.igallery.util.GridSpacingItemDecoration
 import com.example.igallery.util.PaginationScrollListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FoldersFragment : Baseragment<FragmentMediaBinding>() {
 
     private lateinit var folderAdapter: FolderAdapter
 
-    private val mainViewModel: MainViewModel by activityViewModels {
-        val db = GalleryDatabase.getDataBase(requireContext())
-        val repository = Repository(db, requireActivity().contentResolver)
-        CustomViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMediaBinding
         get() = FragmentMediaBinding::inflate

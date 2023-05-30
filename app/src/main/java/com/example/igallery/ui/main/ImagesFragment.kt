@@ -17,7 +17,9 @@ import com.example.igallery.ui.fullscreen.FullScreenActivity
 import com.example.igallery.util.CustomViewModelFactory
 import com.example.igallery.util.GridSpacingItemDecoration
 import com.example.igallery.util.PaginationScrollListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ImagesFragment : Baseragment<FragmentMediaBinding>() {
 
     companion object {
@@ -25,11 +27,7 @@ class ImagesFragment : Baseragment<FragmentMediaBinding>() {
     }
 
     private lateinit var imageAdapter: ImageAdapter
-    private val mainViewModel: MainViewModel by activityViewModels {
-        val db = GalleryDatabase.getDataBase(requireContext())
-        val repository = Repository(db, requireActivity().contentResolver)
-        CustomViewModelFactory(repository)
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private fun setupObservers() {
         mainViewModel.progress.observe(this) {
