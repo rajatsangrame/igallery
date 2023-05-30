@@ -28,9 +28,9 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         binding.etSearch.doOnTextChanged { text, _, _, _ ->
             viewModel.setQuery("${text ?: ""}".trim())
         }
-        viewModel.setQuery("")
         setupRecyclerView()
         setupObservers()
+        viewModel.setQuery("")
     }
 
     override val bindingInflater: (LayoutInflater) -> ActivitySearchBinding
