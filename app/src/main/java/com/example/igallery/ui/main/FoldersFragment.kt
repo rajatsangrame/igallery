@@ -8,12 +8,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.igallery.R
-import com.example.igallery.data.Repository
-import com.example.igallery.data.db.GalleryDatabase
 import com.example.igallery.databinding.FragmentMediaBinding
 import com.example.igallery.ui.*
 import com.example.igallery.ui.adapter.FolderAdapter
-import com.example.igallery.util.CustomViewModelFactory
 import com.example.igallery.util.GridSpacingItemDecoration
 import com.example.igallery.util.PaginationScrollListener
 import dagger.hilt.android.AndroidEntryPoint

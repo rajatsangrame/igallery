@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.igallery.data.db.Image
-import com.example.igallery.databinding.ItemMediaBinding
+import com.example.igallery.databinding.ItemImageBinding
 import com.example.igallery.util.loadThumbnail
 
 class ImageAdapter(
@@ -20,7 +20,7 @@ class ImageAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemMediaBinding.inflate(
+        val binding = ItemImageBinding.inflate(
             layoutInflater,
             parent, false
         )
@@ -35,7 +35,7 @@ class ImageAdapter(
         return images.size
     }
 
-    inner class ViewHolder(private val binding: ItemMediaBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
                 callback(images[adapterPosition])

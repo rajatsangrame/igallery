@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.igallery.data.db.Folder
-import com.example.igallery.databinding.ItemMediaBinding
+import com.example.igallery.databinding.ItemFolderBinding
 import com.example.igallery.util.loadThumbnail
 
 class FolderAdapter(
@@ -20,7 +20,7 @@ class FolderAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = ItemMediaBinding.inflate(
+        val binding = ItemFolderBinding.inflate(
             layoutInflater,
             parent, false
         )
@@ -35,7 +35,7 @@ class FolderAdapter(
         return folders.size
     }
 
-    inner class ViewHolder(private val binding: ItemMediaBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ItemFolderBinding) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {

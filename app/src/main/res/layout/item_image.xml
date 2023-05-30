@@ -10,19 +10,18 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_marginTop="8dp"
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:maxLines="1"
         android:gravity="start"
+        android:maxLines="1"
         android:padding="2dp"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
