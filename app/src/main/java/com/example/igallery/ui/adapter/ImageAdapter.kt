@@ -2,6 +2,7 @@ package com.example.igallery.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.igallery.data.db.Image
 import com.example.igallery.databinding.ItemImageBinding
@@ -9,15 +10,18 @@ import com.example.igallery.databinding.ItemSearchImageBinding
 import com.example.igallery.util.loadThumbnail
 
 class ImageAdapter(
-    private var images: List<Image> = ArrayList(),
+    private var images: MutableList<Image> = ArrayList(),
     private val callback: (Image) -> Unit,
     private val search: Boolean = false
 ) :
     RecyclerView.Adapter<BaseViewHolder<Image>>() {
 
-    fun setImages(images: List<Image>) {
-        this.images = images
-        notifyDataSetChanged()
+    fun setImages(newImages: List<Image>) {
+        val diffCallback = DiffUtilCallBack(images, newImages)
+        val diffCourses = DiffUtil.calculateDiff(diffCallback)
+        images.clear()
+        images.addAll(newImages)
+        diffCourses.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Image> {
@@ -70,5 +74,26 @@ class ImageAdapter(
         }
     }
 
+    inner class DiffUtilCallBack(
+        private val oldList: List<Image>,
+        private val newList: List<Image>,
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize() = oldList.size
+
+        override fun getNewListSize() = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return when {
+                oldList[oldItemPosition].id != newList[newItemPosition].id -> false
+                oldList[oldItemPosition].path != newList[newItemPosition].path -> false
+                oldList[oldItemPosition].name != newList[newItemPosition].name -> false
+                else -> true
+            }
+        }
+    }
 
 }
